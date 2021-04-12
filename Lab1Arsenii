@@ -1,0 +1,27 @@
+import UIKit
+
+func prims (_ matrix : [[Int]]) {
+    var selected = 0
+    var selectedSoFar = Set<Int>()
+    selectedSoFar.insert( (matrix[selected].enumerated().min{ $0.element < $1.element }?.offset)! )
+
+    while selectedSoFar.count < matrix.count {
+        var minValue = Int.max
+        var minIndex = selected
+        var initialRow = 0
+        for row in selectedSoFar {
+            let candidateMin = matrix[row].enumerated().filter{$0.element > 0 && !selectedSoFar.contains($0.offset) }.min{ $0.element < $1.element }
+            if (minValue > candidateMin?.element ?? Int.max ) {
+                minValue = candidateMin?.element ?? Int.max
+                minIndex = (candidateMin?.offset) ?? 0
+                initialRow = row
+            }
+        }
+        print ("edge value \(minValue) with \(initialRow) to \(minIndex)")
+        selectedSoFar.insert(minIndex)
+        selected = (minValue)
+    }
+}
+
+let input = [[0,0,7,0,0,0,46,98],[0,0,33,0,0,99,0,0],[7,33,0,99,92,28,0,64],[0,0,99,0,15,52,0,0],[0,92,15,0,0,0,58],[0,99,28,52,0,0,0,0],[46,0,0,0,0,0,0,36],[98,0,64,0,58,0,36,0]]
+prims(input)
